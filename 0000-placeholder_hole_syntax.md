@@ -4,7 +4,7 @@
 
 # Summary
 
-"ask the compiler" - Parse "_" in any ident position as a placeholder to query possibilities, inspired by the haskell "holes" workflow.
+"ask the compiler" - Parse "_" in any ident position as a placeholder to query possibilities, inspired by the haskell "holes" workflow, allowing typechecking of incomplete code.
 
 # Motivation
 
