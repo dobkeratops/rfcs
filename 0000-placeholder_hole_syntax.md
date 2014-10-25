@@ -28,7 +28,6 @@ but going further increasingly elaborate queries could be made, eg
 
  `fn foo(x:X)->Y { _(x) }`  - find any functions satisfying  (X)->Y
  
- `_{ foo: expr, bar: expr,.. }`  - find any structs with these named fields
  
  `x._.bar()`  - search the fields to find which one in turn has a 'bar()' method; also try `x._._.bar()` etc, this would be a great help for navigating deep structures.
  
@@ -37,6 +36,8 @@ but going further increasingly elaborate queries could be made, eg
  `fn foo(x:X,y:T)->_{ ... code..}` - report the output type
  
  `fn foo(x,y)->_ {...code..}` - examine 'foo' callsites, and report a valid signature for foo (refactoring scenario, when extracting code as a new function)
+
+ `_{ foo: expr, bar: expr,.. }`  - find any structs with these named fields
 
 ## Other possibilities
 In future tooling - an interactive environment could provide GUI dropboxes to fill in the holes, with continuous compilation in the background, gathering suggestions.
@@ -48,9 +49,12 @@ possibly takes syntax space from other uses, eg some languages use _ as a lambda
 
 # Alternatives
 
--Experiment with similar functionality using an obscure unicode character for the same purpose, without changing the parser.
+-Experiment with similar functionality using an obscure unicode character for the same purpose, without changing the parser, just changing error messages.
+
 -Code with placeholders could be treated as "unimplemented", or it could fail to compile.
+
 -The placeholder could merely be placed in the AST, and left to external tools using the Rust API to make suggestions.
+
 -just wait for a traditional IDE.
 
 # Unresolved questions
