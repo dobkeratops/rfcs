@@ -4,7 +4,7 @@
 
 # Summary
 
-"ask the compiler" - Parse "_" in any ident position as a placeholder to query possibilities, inspired by the haskell "holes" workflow, allowing typechecking of incomplete code. Add the concept to the Rust AST.
+"ask the compiler" - Parse "_" in any ident position as a placeholder to query possibilities, inspired by the haskell "holes" workflow, allowing typechecking of incomplete code. Add the concept to the Rust AST & some later compiler stages.
 
 # Motivation
 
@@ -28,6 +28,7 @@ but going further increasingly elaborate queries could be made, eg
 
  `fn foo(x:X)->Y { _(x) }`  - find any functions satisfying  (X)->Y
  
+ `_(x,y,_)`   - find functions that take an X and a Y as an input.Beyond OO autocomplete, since multiple types are used
  
  `x._.bar()`  - search the fields to find which one in turn has a 'bar()' method; also try `x._._.bar()` etc, this would be a great help for navigating deep structures.
  
@@ -40,7 +41,7 @@ but going further increasingly elaborate queries could be made, eg
  `_{ foo: expr, bar: expr,.. }`  - find any structs with these named fields
 
 ## Other possibilities
-In future tooling - an interactive environment could provide GUI dropboxes to fill in the holes, with continuous compilation in the background, gathering suggestions.
+In future tooling - an interactive environment could provide GUI dropboxes to fill in the holes, with continuous compilation in the background, gathering suggestions, giving a similar editing experience to OO autocomplete.
 
 # Drawbacks
 
