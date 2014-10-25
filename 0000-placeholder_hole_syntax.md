@@ -9,7 +9,7 @@
 # Motivation
 
 Popular OO languages have a strong draw with mature IDEs, where "dot" autocompletion discovers available methods & fields rapidly as a user enters code, without having to manually consult documentation. 
-This is invaluable for navigating complex APIs such as GUIs or 3d package SDKs- for many purposes, the tooling is more important than the language.
+This is invaluable for navigating complex APIs such as GUIs or 3d package SDKs- for many purposes, the tooling is more significant than any advantages in the language.
 
 This proposal aims to close the productivity gap another way, leveraging Rusts 2-way type inference, within the traditional edit-compile cycle.
 
