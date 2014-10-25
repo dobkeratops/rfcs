@@ -27,10 +27,15 @@ The most basic use would be:
 but going further increasingly elaborate queries could be made, eg
 
  `fn foo(x:X)->Y { _(x) }`  - find any functions satisfying  (X)->Y
+ 
  `_{ foo: expr, bar: expr,.. }`  - find any structs with these named fields
- `x._.bar()`  - search the fields to find which one in turn has a 'bar()' method (also try x._._.bar() etc)
+ 
+ `x._.bar()`  - search the fields to find which one in turn has a 'bar()' method; also try `x._._.bar()` etc, this would be a great help for navigating deep structures.
+ 
  `fn foo(x:X)->Y {a._()._()}`  - find pairs of functions such that (X)->Z,  (Z)->Y
+ 
  `fn foo(x:X,y:T)->_{ ... code..}` - report the output type
+ 
  `fn foo(x,y)->_ {...code..}` - examine 'foo' callsites, and report a valid signature for foo (refactoring scenario, when extracting code as a new function)
 
 ## Other possibilities
@@ -43,9 +48,9 @@ possibly takes syntax space from other uses, eg some languages use _ as a lambda
 
 # Alternatives
 
--Experiment with similar functionality using an obscure unicode character for the same purpose, without changine the parser.
+-Experiment with similar functionality using an obscure unicode character for the same purpose, without changing the parser.
 -Code with placeholders could be treated as "unimplemented", or it could fail to compile.
--The placeholder could merely be placed in the AST, and left to other tools using the Rust API to make suggestoins.
+-The placeholder could merely be placed in the AST, and left to external tools using the Rust API to make suggestions.
 -just wait for a traditional IDE.
 
 # Unresolved questions
