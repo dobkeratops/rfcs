@@ -4,7 +4,7 @@
 
 # Summary
 
-"ask the compiler" - Parse "_" in any ident position as a placeholder to query possibilities, inspired by the haskell "holes" workflow, allowing typechecking of incomplete code. Add such a concept to the Rust AST.
+"ask the compiler" - Parse "_" in any ident position as a placeholder to query possibilities, inspired by the haskell "holes" workflow, allowing typechecking of incomplete code. Add the concept to the Rust AST.
 
 # Motivation
 
