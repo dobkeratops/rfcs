@@ -109,10 +109,10 @@ Imagine the ability to list 'classes' with 'methods', then 'gather_set' to produ
 
 would there be any utility in the 'gather' making extra information from the context available, for example gathering invocations of a debug macro alongside the function they occur in, or listing fields gathered from wrapped struct definitions alongside their enclosing struct name, e.g.
 
-def_struct!{ struct Foo { x, y, z} }   =expand=>    struct Foo {  field!(x),  field!(y), field!(z)   }
-def_struct! { struct Bar { y,  w}}      =expand=>    struct Bar {  field!(y),  field!(w)              }
+    def_struct!{ struct Foo { x, y, z} }   =expand=>    struct Foo {  field!(x),  field!(y), field!(z)   }
+    def_struct! { struct Bar { y,  w}}      =expand=>    struct Bar {  field!(y),  field!(w)              }
 
-gather!(field,super!(field))           =expand=>    x,struct Foo      y,struct Foo,      z,struct Foo,     w,struct Bar
+    gather!(field,super!(field))           =expand=>    x,struct Foo      y,struct Foo,      z,struct Foo,     w,struct Bar
 
 would there be any consistent logical way of doing this, or would it go too far in obscurity. 
 
