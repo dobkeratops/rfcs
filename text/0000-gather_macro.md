@@ -11,6 +11,8 @@ see also forum post https://users.rust-lang.org/t/gather-macro-invocations-e-g-c
 
 Potentially useful for rolling 'class factories', 'component systems', bindings to scripting languages/UIs; also a similar use case is already demonstrated in the inbuilt unit tests, where ```#[test]``` gathers many functions and calls them from a generated test function. Macros accessible from the language out of the box will see more use than compiler plugins.
 
+Rust offers a choice between 'sorting by type', and 'sorting by function' (e.g. polymorphism through traits, or matching on enum variants). A user could wrap types and functions in a macro that can be rolled either way.
+
 Some use cases are already possible with nested repeat features , but they require items to be declared in one location (e.g. a project may prefer to have 'a source file per entity', rather than one source file defining all the entities)
 
 # Detailed design
@@ -85,8 +87,10 @@ The reverse may be useful, e.g. where a user can mark certain items to be *pulle
 in the 'gather_into' example, would it be better to default into global or self scope, and simplify the calls by not needing to specify that.  
 Perhaps gathers mimicking the module tree could easily be handled in the 'unit test' case, with furhter utility in listing the modules they arise from (in which case 'self' scope is clearly superior)
 
-## interaction with recursive/nested macros -
+## ordering, interaction with recursive/nested macros -
 would gather have to be invoked as a seperate pass, before all other macros: would it have to be tested again every time a macro is expanded (gather!(), then apply expansions which may contain more 'gathers', ...)
+
+should gathers sit around waiting for potential matches in later expansions, or be eliminated when they find nothing.
 
 ## gather unique elements as a 'set' ?
 
@@ -100,3 +104,17 @@ Imagine the ability to list 'classes' with 'methods', then 'gather_set' to produ
     gather!(def_class)  // epands to produce  { method!(render..)  method!(update..) } {method!(update)  method!collide(..)}
     gather_unqiue_set!(method) // expands to produce { render(){}  update(){}  collide(){}  }
     
+    
+## carrying information from enclosing scopes?
+
+would there be any utility in the 'gather' making extra information from the context available, for example gathering invocations of a debug macro alongside the function they occur in, or listing fields gathered from wrapped struct definitions alongside their enclosing struct name, e.g.
+
+def_struct!{ struct Foo { x, y, z} }   =expand=>    struct Foo {  field!(x),  field!(y), field!(z)   }
+def_struct! { struct Bar { y,  w}}      =expand=>    struct Bar {  field!(y),  field!(w)              }
+
+gather!(field,super!(field))           =expand=>    x,struct Foo      y,struct Foo,      z,struct Foo,     w,struct Bar
+
+would there be any consistent logical way of doing this, or would it go too far in obscurity. 
+
+
+
