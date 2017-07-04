@@ -19,7 +19,7 @@ Some use cases are already possible with nested repeat features , but they requi
 
 2 independant parts with potential overlap in implementation - the ability for the macro system to scan the AST for certain features and gather them into one location.
 
-## part 1: 
+## part 1 -gather macro: 
 A 'gather!()' macro, which behaves as this example shows:-
 
     list_of_entity_types!{gather!(declare_entity_type)}
