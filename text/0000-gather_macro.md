@@ -1,0 +1,77 @@
+- Start Date: (fill me in with today's date, YYYY-MM-DD)
+- RFC PR #: (leave this empty)
+- Rust Issue #: (leave this empty)
+
+# Summary
+
+generalize the ability to gather invocations (exhibited by #[test]) , easily accessible in a proposed macro ```gather!()``` and attribute ```#[gather_into(<macro_name>)]```
+see also forum post https://users.rust-lang.org/t/gather-macro-invocations-e-g-class-factory-roll-one-big-enum/11674
+
+# Motivation
+
+Potentially useful for rolling 'class factories', 'component systems', bindings to scripting languages/UIs; also a similar use case is already demonstrated in the inbuilt unit tests, where #[test] gathers many functions and calls them from a generated test function. Macros accessible from the language out of the box will see more use than compiler plugins.
+
+Some use cases are already possible with nested repeat features , but they require items to be declared in one location (e.g. a project may prefer to have 'a source file per entity', rather than one source file defining all the entities)
+
+# Detailed design
+
+2 independant parts with potential overlap in implementation - the ability for the macro system to scan the AST for certain features and gather them into one location.
+
+## part 1: 
+A 'gather!()' macro, which behaves as this example shows:-
+
+    list_of_entity_types!{gather!(declare_entity_type)}
+    
+    declare_entity_type!( struct Foo { ..} ) // these could appear in any source file
+    declare_entity_type!( struct Bar { ..} ) // but will all be found by gather!(...)
+
+Output is equivalent to:-
+
+    list_of_entity_types!{
+        struct Foo { .. }
+        struct Bar { .. }
+    }
+    
+    declare_entity_type!( struct Foo { ..} ) // the original instances are retained
+    declare_entity_type!( struct Bar { ..} ) //'declare_entity_type' could ignore contents, or do something useful
+    
+    
+
+## part 2: 'gather attribute', 
+This causes instances of standard language items to be gathered into one location, and wrapped in a macro. This has the advantage of being applicable to items using the standard language syntax, more readily comprehendable.
+
+
+    #[gather_into(self,my_test)]
+    fn foo() { ...}
+    
+    #[gather_into(self,my_test)]
+    fn bar() {...}
+    
+Output is equivalent to:-
+    
+    my_test!{
+      fn foo() { ... }
+      fn bar() { ... }
+    }
+    
+
+# Drawbacks
+
+adds extra complexity to the macro system, begins to introduce 'behaviour at distance', however the as this happens in a distinct compiler phase, it should be tolerable.
+
+# Alternatives
+
+rely on user writen procedural macros for the same tasks
+
+
+# Unresolved questions
+
+Scope: the original suggestion operated from the root of the scope/module tree, but there may be utility in restricting the scope, e.g. the ability to gather wihtin a module, or within stages of recursive macro invocation, e.g. 'list all the given parameters, wrap them, match them to filter further, now gather certain parameters and do somehting extra with them in one place'.
+An obvious default for 'gather' would be to search from the current block and any contained blocks; so the user would need to place a 'whole-program' gather in the project root.
+
+Determining the best default behaviour may require some thought and experimentation. Perhaps an explicit 'gather_from!(self,macro_name)', 'gather_from!( * ,macro_name)', 'gather_from!( :: , macro_name )' would keep options open.
+
+The reverse may be useful, e.g. where a user can mark certain items to be *pulled in* by a library which has more complex behaviour applied internally.
+
+in the 'gather_into' example, would it be better to default into global or self scope, and simplify the calls by not needing to specify that.  
+Perhaps gathers mimicking the module tree could easily be handled in the 'unit test' case, with furhter utility in listing the modules they arise from (in which case 'self' scope is clearly superior)
