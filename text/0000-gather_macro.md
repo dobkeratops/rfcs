@@ -11,7 +11,7 @@ see also forum post https://users.rust-lang.org/t/gather-macro-invocations-e-g-c
 
 Potentially useful for rolling 'class factories', 'component systems', bindings to scripting languages/UIs; also a similar use case is already demonstrated in the inbuilt unit tests, where ```#[test]``` gathers many functions and calls them from a generated test function. Macros accessible from the language out of the box will see more use than compiler plugins.
 
-Rust offers a choice between 'sorting by type', and 'sorting by function' (e.g. polymorphism through traits, or matching on enum variants). A user could wrap types and functions in a macro that can be rolled either way.
+Rust offers a choice between 'sorting by type', and 'sorting by function' (e.g. polymorphism through traits, or matching on enum variants). A user could wrap seperate types and functions in a macro that can be rolled either way. (e.g. many structs could be ```gather!```ed into a tuple struct,or many functions could be ```gather!```ed into a single match body.)
 
 Some use cases are already possible with nested repeat features , but they require items to be declared in one location (e.g. a project may prefer to have 'a source file per entity', rather than one source file defining all the entities)
 
