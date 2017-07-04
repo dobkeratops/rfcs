@@ -73,7 +73,9 @@ rely on user writen procedural macros for the same tasks
 
 # Unresolved questions
 
-Scope: the original suggestion operated from the root of the scope/module tree, but there may be utility in restricting the scope, e.g. the ability to gather wihtin a module, or within stages of recursive macro invocation, e.g. 'list all the given parameters, wrap them, match them to filter further, now gather certain parameters and do somehting extra with them in one place'.
+## Scope: 
+
+the original suggestion operated from the root of the scope/module tree, but there may be utility in restricting the scope, e.g. the ability to gather wihtin a module, or within stages of recursive macro invocation, e.g. 'list all the given parameters, wrap them, match them to filter further, now gather certain parameters and do somehting extra with them in one place'.
 An obvious default for 'gather' would be to search from the current block and any contained blocks; so the user would need to place a 'whole-program' gather in the project root.
 
 Determining the best default behaviour may require some thought and experimentation. Perhaps an explicit 'gather_from!(self,macro_name)', 'gather_from!( * ,macro_name)', 'gather_from!( :: , macro_name )' would keep options open.
@@ -82,3 +84,19 @@ The reverse may be useful, e.g. where a user can mark certain items to be *pulle
 
 in the 'gather_into' example, would it be better to default into global or self scope, and simplify the calls by not needing to specify that.  
 Perhaps gathers mimicking the module tree could easily be handled in the 'unit test' case, with furhter utility in listing the modules they arise from (in which case 'self' scope is clearly superior)
+
+## interaction with recursive/nested macros -
+would gather have to be invoked as a seperate pass, before all other macros: would it have to be tested again every time a macro is expanded (gather!(), then apply expansions which may contain more 'gathers', ...)
+
+## gather unique elements as a 'set' ?
+
+Would there be utility in being able to control the collection used, sorting/reducing the items appropriately, e.g. the instances could be gathered into a vector in sequence,  or they could be reduced into a set , only one unique instance.
+Imagine the ability to list 'classes' with 'methods', then 'gather_set' to produce one list of the *unique* method names, e.g.
+
+    def_class!{  Foo{  render(){}   update(){}  }  }
+    def_class!{  Bar{  update(){}  collide(){}  }  }
+    def_class!{  Baz{  render(){}update(){}  collide(){}  }  }
+    
+    gather!(def_class)  // epands to produce  { method!(render..)  method!(update..) } {method!(update)  method!collide(..)}
+    gather_unqiue_set!(method) // expands to produce { render(){}  update(){}  collide(){}  }
+    
