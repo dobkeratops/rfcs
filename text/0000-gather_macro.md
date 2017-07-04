@@ -41,17 +41,24 @@ Output is equivalent to:-
 This causes instances of standard language items to be gathered into one location, and wrapped in a macro. This has the advantage of being applicable to items using the standard language syntax, more readily comprehendable.
 
 
-    #[gather_into(self,my_test)]
+    #[gather_into(my_test)]
     fn foo() { ...}
     
-    #[gather_into(self,my_test)]
+    #[gather_into(my_test)]
     fn bar() {...}
-    
+
+    #[gather_into(other_test)]
+    fn baz() {...}
+
 Output is equivalent to:-
     
-    my_test!{
-      fn foo() { ... }
-      fn bar() { ... }
+    my_test!{               //instantiated by 'gather_into'
+        fn foo() { ... }      //result of found 'gather_into(..)'
+        fn bar() { ... }
+    }
+    
+    other_test!{            //instantiated by 'gather_into'
+        fn baz() {...}
     }
     
 
