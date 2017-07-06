@@ -15,6 +15,15 @@ Rust offers a choice between 'sorting by type', and 'sorting by function' (e.g. 
 
 Some use cases are already possible with nested repeat features , but they require items to be declared in one location (e.g. a project may prefer to have 'a source file per entity', rather than one source file defining all the entities)
 
+## Possible examples of applicability
+
+###'high order macro' 
+pattern, e.g. used by cargo,
+https://github.com/rust-lang/cargo/blob/eb6cf012a6cc23c9c89c4009564de9fccc38b9cb/src/bin/cargo.rs#L101-L134
+
+A list of commands is maintained which presumably maps onto real functions eventually.
+
+
 # Detailed design
 
 2 independant parts with potential overlap in implementation - the ability for the macro system to scan the AST for certain features and gather them into one location.
